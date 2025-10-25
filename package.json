@@ -1,16 +1,42 @@
 {
   "name": "proxy-switch",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "commonjs",
+  "description": "Interactive CLI to switch system-wide proxy settings on Ubuntu",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "bundle": "esbuild dist/index.js --bundle --platform=node --format=cjs --outfile=dist/bundle.js",
+    "sea-prep": "node --experimental-sea-config sea-config.json",
+    "sea-inject": "cp $(which node) dist/bin/proxy-switch && npx postject dist/bin/proxy-switch NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2",
+    "package": "pnpm build && pnpm bundle && pnpm sea-prep && pnpm sea-inject"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "bin": {
+    "proxy-switch": "dist/bin/proxy-switch"
+  },
+  "keywords": [
+    "proxy",
+    "cli",
+    "ubuntu"
+  ],
+  "author": "Navid Shirmohammadi",
+  "license": "Apache-2.0",
   "packageManager": "pnpm@10.15.1",
   "dependencies": {
-    "inquirer": "^12.10.0"
+    "inquirer": "12.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.6",
+    "esbuild": "^0.25.11",
+    "pkg": "^5.8.1",
+    "postject": "1.0.0-alpha.6",
+    "typescript": "^5.6.3"
+  },
+  "pkg": {
+    "targets": [
+      "node18-linux-x64"
+    ],
+    "outputPath": "dist/bin",
+    "bytecode": false
   }
 }

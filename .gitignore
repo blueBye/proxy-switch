@@ -1,2 +1,5 @@
 node_modules
 .idea
+dist
+sea-prep.blob
+proxy-switch
